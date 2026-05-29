@@ -1,6 +1,5 @@
 import {Link, useNavigate} from 'react-router-dom';
 import Button from '../../components/Button';
-import { authenticateUser, getRoleBasedRedirect, setCurrentUser } from '../../utils/auth';
 import { useState } from 'react';
 
 const inputClasses = 'mt-2 w-full rounded-xl border border-zinc-300 bg-zinc-100 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-zinc-50';
@@ -12,7 +11,6 @@ const SignInPage = () => {
         email: '',
         password: ''
     });
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
@@ -25,22 +23,7 @@ const SignInPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setError('');
-        
-        const user = authenticateUser(formData.email, formData.password);
-        
-        if (user) {
-            if (!user.isActive) {
-                setError('Your account is inactive. Please contact administrator.');
-                return;
-            }
-            
-            setCurrentUser(user);
-            const redirectPath = getRoleBasedRedirect(user.role);
-            navigate(redirectPath);
-        } else {
-            setError('Invalid email or password. Please try again.');
-        }
+        navigate('/dashboard');
     };
     return(
         <>
@@ -48,12 +31,7 @@ const SignInPage = () => {
              <p className="mt-3 text-sm leading-6 text-zinc-600">
                 Access your account with the same monochrome wireframe language used across the site.
             </p>
-            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-                {error && (
-                    <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
-                        {error}
-                    </div>
-                )}
+            <form onSubmit={handleSubmit} noValidate className="mt-8 space-y-5">
                 <div>
                     <label htmlFor="signin-email" className="text-sm font-medium text-zinc-700">
                         Email address
@@ -67,7 +45,6 @@ const SignInPage = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         className={inputClasses}
-                        required
                     />
                 </div>
                 <div>
@@ -83,7 +60,6 @@ const SignInPage = () => {
                         value={formData.password}
                         onChange={handleInputChange}
                         className={inputClasses}
-                        required
                     />
 
                     <p className="mt-2 text-xs leading-5 text-zinc-500">
