@@ -5,7 +5,7 @@ import AboutPage from './pages/AboutPage';
 import ArticleListPage from './pages/ArticleListPage';
 import ArticlePage from './pages/ArticlePage';
 import HomePage from './pages/HomePage';
-import RoleBasedDashboard from './components/RoleBasedDashboard';
+import DashboardPage from './pages/DashboardPages/DashboardPage';
 import UsersPage from './pages/DashboardPages/UsersPage';
 import ReportsPage from './pages/DashboardPages/ReportsPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -30,7 +30,7 @@ const routes = [
   },
   {
     path: '/dashboard',
-    element: <DashboardLayout><RoleBasedDashboard /></DashboardLayout>,
+    element: <DashboardLayout><DashboardPage /></DashboardLayout>,
     errorElement: <NotFoundPage />
   },
   {
