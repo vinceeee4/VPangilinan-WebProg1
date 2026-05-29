@@ -1,0 +1,11 @@
+{
+  "name": "pangilinan-webprog1",
+  "private": true,
+  "scripts": {
+    "client": "npm --prefix Pangilinan-client run dev",
+    "server": "npm --prefix Pangilinan-server run dev",
+    "dev": "npm --prefix Pangilinan-client run dev",
+    "build": "npm --prefix Pangilinan-client run build",
+    "seed:admin": "npm --prefix Pangilinan-server run seed:admin"
+  }
+}
