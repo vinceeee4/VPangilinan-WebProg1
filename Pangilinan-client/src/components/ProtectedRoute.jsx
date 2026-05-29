@@ -1,16 +1,17 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { getCurrentUser, isAuthenticated } from "../utils/auth";
+import { Navigate, useLocation } from 'react-router-dom';
+import { getCurrentUser, isAuthenticated } from '../utils/auth';
 
-const ProtectedRoute = ({ children, roles, allowedRoles }) => {
+const ProtectedRoute = ({ children, allowedRoles, roles }) => {
   const location = useLocation();
-  const currentUser = getCurrentUser();
-  const permittedRoles = allowedRoles || roles || [];
 
   if (!isAuthenticated()) {
-    return <Navigate to="/auth/signin" replace state={{ from: location }} />;
+    return <Navigate to="/auth/signin" state={{ from: location }} replace />;
   }
 
-  if (permittedRoles.length && !permittedRoles.includes(currentUser?.type)) {
+  const user = getCurrentUser();
+  const permittedRoles = roles || allowedRoles;
+
+  if (permittedRoles && user && !permittedRoles.includes(user.type)) {
     return <Navigate to="/dashboard" replace />;
   }
 

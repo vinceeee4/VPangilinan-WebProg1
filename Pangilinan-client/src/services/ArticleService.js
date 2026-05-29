@@ -1,15 +1,36 @@
-import API from "./api";
+import axios from 'axios';
+import { getApiBaseUrl, getAuthToken } from '../utils/auth';
 
-export const mapArticleFromApi = (article) => ({
-  ...article,
-  id: article._id,
-  content: Array.isArray(article.content) ? [...article.content] : [],
-  description: String(article.content?.[0] ?? "").trim(),
-  image: article.imageUrl,
+const api = axios.create({
+  baseURL: getApiBaseUrl()
 });
 
-export const fetchArticles = () => API.get("/articles");
-export const fetchArticle = (name) => API.get(`/articles/${name}`);
-export const createArticle = (article) => API.post("/articles", article);
-export const updateArticle = (id, article) => API.put(`/articles/${id}`, article);
-export const deleteArticle = (id) => API.delete(`/articles/${id}`);
+api.interceptors.request.use((config) => {
+  const token = getAuthToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+export const fetchArticles = () => api.get('/articles');
+export const fetchArticle = (name) => api.get(`/articles/${name}`);
+
+export const mapArticleFromApi = (rawArticle) => {
+  if (!rawArticle) return null;
+
+  const content = Array.isArray(rawArticle.content)
+    ? rawArticle.content
+    : String(rawArticle.content || '').split(/\n+/).filter(Boolean);
+
+  return {
+    _id: rawArticle._id,
+    name: rawArticle.name,
+    title: rawArticle.title,
+    content,
+    image: rawArticle.imageUrl || rawArticle.image || '',
+    isActive: rawArticle.isActive ?? true
+  };
+};

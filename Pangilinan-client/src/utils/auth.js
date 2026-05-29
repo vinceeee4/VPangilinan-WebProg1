@@ -1,44 +1,55 @@
-export const getRoleBasedRedirect = (role) => {
-  switch (role?.toLowerCase()) {
-    case 'admin':
-      return '/dashboard';
-    case 'user':
-      return '/dashboard';
-    case 'editor':
-      return '/dashboard';
-    default:
-      return '/';
-  }
-};
+const AUTH_TOKEN_KEY = 'authToken';
+const AUTH_USER_KEY = 'authUser';
 
-export const isAuthenticated = () => {
-  return Boolean(getToken() && getCurrentUser());
+export const getApiBaseUrl = () =>
+  import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+
+export const getAuthToken = () => {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem(AUTH_TOKEN_KEY);
 };
 
 export const getCurrentUser = () => {
-  const user = localStorage.getItem('currentUser');
-  return user ? JSON.parse(user) : null;
-};
+  if (typeof window === 'undefined') return null;
 
-export const setCurrentUser = (user) => {
-  const normalizedUser = user?.type === 'viewer' ? { ...user, type: 'user' } : user;
-  localStorage.setItem('currentUser', JSON.stringify(normalizedUser));
+  try {
+    const stored = window.localStorage.getItem(AUTH_USER_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch (error) {
+    console.error('Failed to parse current user from localStorage', error);
+    return null;
+  }
 };
-
-export const getToken = () => localStorage.getItem('token');
 
 export const setAuthSession = ({ token, user }) => {
-  const normalizedUser = user?.type === 'viewer' ? { ...user, type: 'user' } : user;
+  if (typeof window === 'undefined') return;
 
-  localStorage.setItem('token', token);
-  localStorage.setItem('firstName', normalizedUser?.firstName || '');
-  localStorage.setItem('type', normalizedUser?.type || '');
-  setCurrentUser(normalizedUser);
+  if (!token || !user) {
+    logoutUser();
+    return;
+  }
+
+  window.localStorage.setItem(AUTH_TOKEN_KEY, token);
+  window.localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
 };
 
 export const logoutUser = () => {
-  localStorage.removeItem('currentUser');
-  localStorage.removeItem('token');
-  localStorage.removeItem('firstName');
-  localStorage.removeItem('type');
+  if (typeof window === 'undefined') return;
+  window.localStorage.removeItem(AUTH_TOKEN_KEY);
+  window.localStorage.removeItem(AUTH_USER_KEY);
+};
+
+export const isAuthenticated = () => {
+  return Boolean(getAuthToken() && getCurrentUser());
+};
+
+export const getRoleBasedRedirect = (role) => {
+  switch (role) {
+    case 'admin':
+      return '/dashboard';
+    case 'editor':
+      return '/dashboard/articles';
+    default:
+      return '/dashboard/reports';
+  }
 };

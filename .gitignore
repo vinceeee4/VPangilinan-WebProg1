@@ -1,8 +1,0 @@
-.env
-node_modules/
-dist/
-build/
-.next/
-.vite/
-*.log
-.git_backup_do_not_commit/

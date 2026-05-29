@@ -1,9 +1,23 @@
-import API from "./api";
+import axios from 'axios';
+import { getApiBaseUrl, getAuthToken } from '../utils/auth';
 
-export const fetchUsers = () => API.get("/users");
-export const createUser = (user) => API.post("/users", user);
-export const registerUser = (user) => API.post("/users/register", user);
-export const updateUser = (id, user) => API.put(`/users/${id}`, user);
-export const deleteUser = (id) => API.delete(`/users/${id}`);
-export const loginUser = (credentials) => API.post("/users/login", credentials);
-export const fetchProfile = () => API.get("/users/me");
+const api = axios.create({
+  baseURL: getApiBaseUrl()
+});
+
+api.interceptors.request.use((config) => {
+  const token = getAuthToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+export const loginUser = (payload) => api.post('/users/login', payload);
+export const registerUser = (payload) => api.post('/users/register', payload);
+export const fetchUsers = () => api.get('/users');
+export const createUser = (payload) => api.post('/users', payload);
+export const updateUser = (id, payload) => api.put(`/users/${id}`, payload);
+export const deleteUser = (id) => api.delete(`/users/${id}`);
