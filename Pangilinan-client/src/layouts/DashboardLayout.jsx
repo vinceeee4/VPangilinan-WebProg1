@@ -15,13 +15,11 @@ import {
   Button,
   IconButton
 } from '@mui/material';
-import {
-  Dashboard as DashboardIcon,
-  Assessment as ReportsIcon,
-  People as UsersIcon,
-  Menu as MenuIcon,
-  Search as SearchIcon
-} from '@mui/icons-material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ReportsIcon from '@mui/icons-material/Assessment';
+import UsersIcon from '@mui/icons-material/People';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
 
 const drawerWidth = 240;
 

@@ -20,14 +20,12 @@ import {
   Menu,
   MenuItem
 } from '@mui/material';
-import {
-  Search as SearchIcon,
-  Add as AddIcon,
-  MoreVert as MoreVertIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Visibility as ViewIcon
-} from '@mui/icons-material';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ViewIcon from '@mui/icons-material/Visibility';
 
 const UsersPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
