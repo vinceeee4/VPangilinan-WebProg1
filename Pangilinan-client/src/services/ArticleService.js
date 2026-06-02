@@ -5,6 +5,10 @@ const api = axios.create({
   baseURL: getApiBaseUrl()
 });
 
+const publicApi = axios.create({
+  baseURL: getApiBaseUrl()
+});
+
 api.interceptors.request.use((config) => {
   const token = getAuthToken();
 
@@ -15,8 +19,15 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export const fetchArticles = () => api.get('/articles');
-export const fetchArticle = (name) => api.get(`/articles/${name}`);
+export const fetchPublicArticles = () => publicApi.get('/articles');
+export const fetchDashboardArticles = () => api.get('/articles');
+export const fetchArticles = fetchPublicArticles;
+export const fetchArticle = (name) => publicApi.get(`/articles/${name}`);
+export const createArticle = (payload) => api.post('/articles', payload);
+export const updateArticle = (id, payload) => api.put(`/articles/${id}`, payload);
+export const deleteArticle = (id) => api.delete(`/articles/${id}`);
+export const setArticleActive = (id, isActive) =>
+  updateArticle(id, { isActive });
 
 export const mapArticleFromApi = (rawArticle) => {
   if (!rawArticle) return null;
@@ -31,6 +42,7 @@ export const mapArticleFromApi = (rawArticle) => {
     title: rawArticle.title,
     content,
     image: rawArticle.imageUrl || rawArticle.image || '',
+    imageUrl: rawArticle.imageUrl || rawArticle.image || '',
     isActive: rawArticle.isActive ?? true
   };
 };

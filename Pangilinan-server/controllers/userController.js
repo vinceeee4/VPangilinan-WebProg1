@@ -74,11 +74,9 @@ const createUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
   const user = await createUserForRegistration(req.body);
-  const token = signToken(user);
 
   res.status(201).json({
-    message: "Registration successful",
-    token,
+    message: "Registration successful. Please log in with an admin or editor account.",
     user: sanitizeUser(user),
   });
 };
@@ -129,6 +127,12 @@ const loginUser = async (req, res) => {
   if (!user.isActive) {
     return res.status(403).json({
       message: "Your account is inactive. Please contact administrator.",
+    });
+  }
+
+  if (!["admin", "editor"].includes(normalizeRole(user.type))) {
+    return res.status(403).json({
+      message: "Viewers are not allowed to log in.",
     });
   }
 

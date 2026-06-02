@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import ArticleList from '../components/ArticleList';
-import { fetchArticles, mapArticleFromApi } from '../services/ArticleService';
+import { fetchPublicArticles, mapArticleFromApi } from '../services/ArticleService';
 
 const ArticleListPage = () => {
   const [articles, setArticles] = useState([]);
@@ -13,7 +13,7 @@ const ArticleListPage = () => {
       try {
         setLoading(true);
         setError('');
-        const { data } = await fetchArticles();
+        const { data } = await fetchPublicArticles();
         setArticles((data?.articles || []).map(mapArticleFromApi));
       } catch (err) {
         setError(err.response?.data?.message || 'Unable to load articles.');

@@ -66,7 +66,7 @@ const ArticleSelectionsPage = () => {
       </Stack>
 
       {loading && (
-        <Typography sx={{ color: 'text.secondary', mt: 2 }}>Loading selections…</Typography>
+        <Typography sx={{ color: 'text.secondary', mt: 2 }}>Loading selections...</Typography>
       )}
     </Box>
   );

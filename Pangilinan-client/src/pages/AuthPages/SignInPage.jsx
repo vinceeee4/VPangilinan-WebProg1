@@ -49,6 +49,11 @@ const SignInPage = () => {
                 Access your account with the same monochrome wireframe language used across the site.
             </p>
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                {location.state?.success && (
+                    <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-700">
+                        {location.state.success}
+                    </div>
+                )}
                 {error && (
                     <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
                         {error}

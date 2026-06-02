@@ -2,7 +2,6 @@ import {Link, useNavigate} from 'react-router-dom';
 import Button from '../../components/Button';
 import { useState } from 'react';
 import { registerUser } from '../../services/UserService';
-import { setAuthSession } from '../../utils/auth';
 import { validations } from '../../utils/validations';
 
 const inputClasses =
@@ -66,8 +65,12 @@ const SignUpPage = () => {
         try {
             setLoading(true);
             const { data } = await registerUser(formData);
-            setAuthSession({ token: data.token, user: data.user });
-            navigate('/dashboard', { replace: true });
+            navigate('/auth/signin', {
+                replace: true,
+                state: {
+                    success: data.message || 'Account created successfully. Please log in.'
+                }
+            });
         } catch (err) {
             setError(err.response?.data?.message || 'Signup failed. Please try again.');
         } finally {
