@@ -10,8 +10,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Divider,
-  Container
+  Divider
 } from '@mui/material';
 import { useLocation, Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -154,40 +153,6 @@ export default function DashboardLayout({ children }) {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#fafafa' }}>
-      {/* App Bar */}
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { xs: '100%', sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-          ml: { sm: `${DRAWER_WIDTH}px` },
-          backgroundColor: 'white',
-          color: '#333',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-          zIndex: 1100
-        }}
-      >
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
-            Dashboard
-          </Typography>
-          <Box sx={{ flex: 1 }} />
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography variant="body2" sx={{ color: '#666' }}>
-              Welcome, Admin
-            </Typography>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
       {/* Drawer - Desktop */}
       <Drawer
         variant="permanent"
@@ -229,15 +194,47 @@ export default function DashboardLayout({ children }) {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          width: { xs: '100%', sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-          ml: { sm: `${DRAWER_WIDTH}px` }
+          minWidth: 0,
+          width: { xs: '100%', sm: `calc(100% - ${DRAWER_WIDTH}px)` }
         }}
       >
-        {/* Toolbar spacing */}
-        <Toolbar />
+        {/* App Bar */}
+        <AppBar
+          position="sticky"
+          elevation={0}
+          sx={{
+            top: 0,
+            backgroundColor: 'white',
+            color: '#333',
+            borderBottom: '1px solid #e5e7eb',
+            boxShadow: '0 6px 18px rgba(15, 23, 42, 0.04)',
+            zIndex: 1000
+          }}
+        >
+          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', minHeight: 64 }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" sx={{ fontWeight: 800, color: '#1976d2' }}>
+              Dashboard
+            </Typography>
+            <Box sx={{ flex: 1 }} />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Typography variant="body2" sx={{ color: '#666' }}>
+                Welcome, Admin
+              </Typography>
+            </Box>
+          </Toolbar>
+        </AppBar>
 
         {/* Page Content */}
-        <Box sx={{ flex: 1, p: { xs: 2, md: 3 }, width: '100%' }}>
+        <Box sx={{ flex: 1, p: { xs: 2, md: 3 }, width: '100%', boxSizing: 'border-box' }}>
           {children}
         </Box>
       </Box>

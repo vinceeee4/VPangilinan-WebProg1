@@ -3,7 +3,6 @@ import {
   Box,
   Card,
   CardContent,
-  Container,
   Grid,
   Paper,
   Stack,
@@ -13,6 +12,8 @@ import {
 import { BarChart } from '@mui/x-charts/BarChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { LineChart } from '@mui/x-charts/LineChart';
+import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import GroupsIcon from '@mui/icons-material/Groups';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -38,6 +39,12 @@ export default function DashboardPage() {
   ];
 
   const genderData = [65, 60];
+  const raceLocations = [
+    { name: 'Monaco Grand Prix', country: 'Monaco', position: [43.7347, 7.4206] },
+    { name: 'Silverstone Circuit', country: 'United Kingdom', position: [52.0786, -1.0169] },
+    { name: 'Suzuka Circuit', country: 'Japan', position: [34.8431, 136.5410] },
+    { name: 'Marina Bay Street Circuit', country: 'Singapore', position: [1.2914, 103.8640] }
+  ];
 
   return (
     <Box>
@@ -286,6 +293,78 @@ export default function DashboardPage() {
               </Box>
             </Stack>
           </Paper>
+        </CardContent>
+      </Card>
+
+      {/* Leaflet Map */}
+      <Card sx={{ mt: 4 }}>
+        <CardContent>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            justifyContent="space-between"
+            alignItems={{ xs: 'flex-start', sm: 'center' }}
+            spacing={1}
+            sx={{ mb: 2 }}
+          >
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                Race Locations Map
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                Key Formula 1 circuits shown with interactive map markers
+              </Typography>
+            </Box>
+            <Typography
+              variant="caption"
+              sx={{
+                px: 1.5,
+                py: 0.75,
+                borderRadius: 1,
+                backgroundColor: '#e3f2fd',
+                color: '#1976d2',
+                fontWeight: 'bold'
+              }}
+            >
+              {raceLocations.length} locations
+            </Typography>
+          </Stack>
+          <Box
+            sx={{
+              height: { xs: 320, md: 420 },
+              overflow: 'hidden',
+              borderRadius: 1,
+              border: '1px solid #e0e0e0',
+              '& .leaflet-container': {
+                height: '100%',
+                width: '100%'
+              }
+            }}
+          >
+            <MapContainer center={[24, 35]} zoom={2} scrollWheelZoom={false}>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {raceLocations.map((location) => (
+                <CircleMarker
+                  key={location.name}
+                  center={location.position}
+                  radius={8}
+                  pathOptions={{
+                    color: '#1976d2',
+                    fillColor: '#1976d2',
+                    fillOpacity: 0.85
+                  }}
+                >
+                  <Popup>
+                    <strong>{location.name}</strong>
+                    <br />
+                    {location.country}
+                  </Popup>
+                </CircleMarker>
+              ))}
+            </MapContainer>
+          </Box>
         </CardContent>
       </Card>
     </Box>
